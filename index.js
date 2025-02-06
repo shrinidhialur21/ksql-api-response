@@ -5,6 +5,11 @@ const axios = require('axios');
 const kafka = new Kafka({
   clientId: 'my-app',
   brokers: ['my-cluster-kafka-bootstrap.kafka:9092'],
+  sasl: {
+    mechanism: "scram-sha-512",
+    username: "my-connect-user",
+    password: " eWKhGtJJ16Fo9svPInU8Osw99zEZ44wt",
+  },
 });
 
 const consumer = kafka.consumer({ groupId: 'test-group' });
