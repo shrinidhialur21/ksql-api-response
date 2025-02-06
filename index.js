@@ -8,7 +8,7 @@ const kafka = new Kafka({
   sasl: {
     mechanism: "scram-sha-512",
     username: "my-connect-user",
-    password: " eWKhGtJJ16Fo9svPInU8Osw99zEZ44wt",
+    password: "eWKhGtJJ16Fo9svPInU8Osw99zEZ44wt",
   },
 });
 
