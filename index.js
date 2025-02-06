@@ -40,7 +40,7 @@ const run = async () => {
         // Log the response from ksqlDB
         console.log('ksqlDB response:', response.data);
       } catch (error) {
-        console.error('Error querying ksqlDB:', error.message);
+        console.error('Error querying ksqlDB:', error);
       }
     },
   });
