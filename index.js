@@ -32,9 +32,9 @@ const run = async () => {
       try {
         // Make the HTTP request to ksqlDB
         const response = await axios.post('http://4.186.36.38:8088/info',  {
-          headers: {
-            'Content-Type': 'application/vnd.ksql.v1+json',
-          },
+          // headers: {
+          //   'Content-Type': 'application/vnd.ksql.v1+json',
+          // },
         });
 
         // Log the response from ksqlDB
