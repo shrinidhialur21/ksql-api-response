@@ -1,49 +1,24 @@
-const { Kafka } = require('kafkajs');
-const axios = require('axios');
+const fs = require("fs");
 
-// Kafka configuration
-const kafka = new Kafka({
-  clientId: 'my-app',
-  brokers: ['my-cluster-kafka-bootstrap.kafka:9092'],
-  sasl: {
-    mechanism: "scram-sha-512",
-    username: "my-connect-user",
-    password: "eWKhGtJJ16Fo9svPInU8Osw99zEZ44wt",
-  },
-});
+console.log("Starting high CPU utilization script...");
 
-const consumer = kafka.consumer({ groupId: 'test-group' });
+// Logging function that writes to a file to simulate disk activity
+function logToFile(message) {
+  fs.appendFileSync("cpu_log.txt", `${new Date().toISOString()} - ${message}\n`);
+}
 
-const run = async () => {
-  await consumer.connect();
-  await consumer.subscribe({ topic: 'topic1', fromBeginning: true });
+// CPU-intensive function
+function highCpuTask() {
+  let count = 0;
+  while (true) {
+    count++;
+    if (count % 1e9 === 0) {
+      const msg = `Heavy computation in progress... Count: ${count}`;
+      console.log(msg);
+      logToFile(msg);
+    }
+  }
+}
 
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      const value = message.value.toString();
-      console.log(`Received message: ${value}`);
-
-      // Prepare the ksqlDB query
-      const ksqlQuery = {
-        ksql: "SELECT * FROM my_stream EMIT CHANGES LIMIT 1;", // Update this query based on your requirement
-        streamsProperties: {}
-      };
-
-      try {
-        // Make the HTTP request to ksqlDB
-        const response = await axios.get('http://4.186.36.38:8088/info',  {
-          // headers: {
-          //   'Content-Type': 'application/vnd.ksql.v1+json',
-          // },
-        });
-
-        // Log the response from ksqlDB
-        console.log('ksqlDB response:', response.data);
-      } catch (error) {
-        console.error('Error querying ksqlDB:', error);
-      }
-    },
-  });
-};
-
-run().catch(console.error);
+// Run the CPU-intensive task in a separate process
+highCpuTask();
